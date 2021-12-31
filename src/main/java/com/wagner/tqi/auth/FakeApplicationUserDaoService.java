@@ -16,16 +16,16 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
+    public Optional<ApplicationUserDetails> selectApplicationUserByUsername(String username) {
 
         return getApplicationUsers()
-                .stream().filter(applicationUser -> username.equals(applicationUser.getUsername()))
+                .stream().filter(applicationUserDetails -> username.equals(applicationUserDetails.getUsername()))
                 .findFirst();
     }
 
-    private List<ApplicationUser> getApplicationUsers(){
-        List<ApplicationUser> applicationUsers = Lists.newArrayList(
-                new ApplicationUser(
+    private List<ApplicationUserDetails> getApplicationUsers(){
+        List<ApplicationUserDetails> applicationUserDetails = Lists.newArrayList(
+                new ApplicationUserDetails(
                         ApplicationUserRole.STUDENT.getGrantedAuthorities(),
                         "ana",
                         passwordEncoder.encode("pass"),
@@ -34,7 +34,7 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao{
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new ApplicationUserDetails(
                         ApplicationUserRole.ADMINTRAINEE.getGrantedAuthorities(),
                         "tom",
                         passwordEncoder.encode("pass"),
@@ -43,7 +43,7 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao{
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new ApplicationUserDetails(
                         ApplicationUserRole.ADMIN.getGrantedAuthorities(),
                         "linda",
                         passwordEncoder.encode("pass"),
@@ -53,6 +53,6 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao{
                         true
                 )
         );
-        return applicationUsers;
+        return applicationUserDetails;
     }
 }

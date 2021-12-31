@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @AllArgsConstructor
-public class ApplicationUser implements UserDetails {
+public class ApplicationUserDetails implements UserDetails {
 
     private final Set<? extends GrantedAuthority> grantedAuthorities;
     private final String username;
