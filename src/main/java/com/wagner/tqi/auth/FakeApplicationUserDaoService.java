@@ -26,7 +26,7 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao{
     private List<ApplicationUserDetails> getApplicationUsers(){
         List<ApplicationUserDetails> applicationUserDetails = Lists.newArrayList(
                 new ApplicationUserDetails(
-                        ApplicationUserRole.STUDENT.getGrantedAuthorities(),
+                        ApplicationUserRole.CUSTOMER.getGrantedAuthorities(),
                         "ana",
                         passwordEncoder.encode("pass"),
                         true,

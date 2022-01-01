@@ -7,12 +7,13 @@ import lombok.Getter;
 @Getter
 public enum ApplicationUserPermission {
 
-    STUDENT_READ("student:read"),
-    STUDENT_WRITE("student:write"),
-    COURSE_READ("course:read"),
-    COURSE_WRITE("course:write");
+    PERSON_READ("person:read"),
+    PERSON_WRITE("person:write"),
+    LOAN_READ("loan:read"),
+    LOAN_WRITE("loan:write");
 
     private final String permission;
 
 
 }
+

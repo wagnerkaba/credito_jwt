@@ -13,17 +13,13 @@ import static com.wagner.tqi.security.ApplicationUserPermission.*;
 @AllArgsConstructor
 @Getter
 public enum ApplicationUserRole {
-    STUDENT(Sets.newHashSet()),
-    ADMIN(Sets.newHashSet(COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE)),
-    ADMINTRAINEE(Sets.newHashSet(COURSE_READ, STUDENT_READ));
+    CUSTOMER(Sets.newHashSet()),
+    ADMIN(Sets.newHashSet(LOAN_READ, LOAN_WRITE, PERSON_READ, PERSON_WRITE)),
+    ADMINTRAINEE(Sets.newHashSet(LOAN_READ, PERSON_READ));
 
     private final Set<ApplicationUserPermission> permissions;
 
     public Set<SimpleGrantedAuthority> getGrantedAuthorities(){
-        // Explicação:
-        // Vide https://www.youtube.com/watch?v=her_7pa0vrg
-        // 1:36:49 - ADDING AUTHORITIES TO USERS
-
         Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toSet());

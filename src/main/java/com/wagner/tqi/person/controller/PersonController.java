@@ -36,7 +36,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('student:write')")
+    @PreAuthorize("hasAuthority('person:write')")
     public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO){
         return personService.createPerson(personDTO);
     }
@@ -44,13 +44,13 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('student:write')")
+    @PreAuthorize("hasAuthority('person:write')")
     public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
         personService.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('student:write')")
+    @PreAuthorize("hasAuthority('person:write')")
     public MessageResponseDTO updateById(@PathVariable  Long id,@RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
         return personService.updateById(id, personDTO);
 
