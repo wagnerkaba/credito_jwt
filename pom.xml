@@ -43,10 +43,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
 			<!--			The latest stable release of MapStruct and its processor are both available from the Maven Central Repository.-->
 			<!--			Let’s also add the annotationProcessorPaths section to the configuration part of the maven-compiler-plugin plugin.-->
