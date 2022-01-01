@@ -1,5 +1,6 @@
 package com.wagner.tqi.person.entity;
 
+import com.wagner.tqi.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,12 +30,19 @@ public class Person {
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    private String password;
 
 
     private LocalDate birthDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Phone> phones;
+
+
+    private ApplicationUserRole userRole;
 
 
 }

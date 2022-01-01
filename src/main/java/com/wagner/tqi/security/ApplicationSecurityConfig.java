@@ -1,7 +1,7 @@
 package com.wagner.tqi.security;
 
 
-import com.wagner.tqi.auth.ApplicationUserService;
+import com.wagner.tqi.user.ApplicationUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-                .antMatchers("/api/v1/students/**").hasRole(CUSTOMER.name())
+                .antMatchers("/api/v1/**").permitAll()
                 .antMatchers("/autenticado").permitAll()
                 .antMatchers("/inicio/login").permitAll()
                 .anyRequest()

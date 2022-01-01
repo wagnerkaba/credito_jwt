@@ -1,5 +1,6 @@
 package com.wagner.tqi.person.dto.request;
 
+import com.wagner.tqi.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +31,17 @@ public class PersonDTO {
     @CPF
     private String cpf;
 
+    @NotEmpty
+    private String email;
+
+    private String password;
+
     private String birthDate;
 
     @NotEmpty
     @Valid
     private List<PhoneDTO> phones;
+
+    private ApplicationUserRole userRole;
 
 }
