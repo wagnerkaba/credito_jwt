@@ -25,6 +25,9 @@ public class Loan {
     private LocalDate primeiraParcela;
 
     @Column(nullable = false)
+    private LocalDate dataPedido;
+
+    @Column(nullable = false)
     private int qtdParcelas;
 
     @ManyToOne

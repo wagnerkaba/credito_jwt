@@ -12,6 +12,7 @@ public class LoanDTO {
     private Long id;
     private Long valor;
     private LocalDate primeiraParcela;
+    private LocalDate dataPedido;
     private int qtdParcelas;
     private int codigo;
     private Long idPerson;
