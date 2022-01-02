@@ -2,6 +2,8 @@ package com.wagner.tqi.loan;
 
 import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
+import com.wagner.tqi.loan.exception.LoanNotFoundException;
+import com.wagner.tqi.person.exception.PersonNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,15 @@ public class LoanController {
         return loanService.getAllLoans();
     }
 
-    @PostMapping("/{idperson}")
-    public void createLoan(@PathVariable Long idperson, @RequestBody LoanDTO loanDTO){
-        loanService.createLoan(loanDTO, idperson);
+    @PostMapping
+    public void createLoan(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException {
+        loanService.createLoan(loanDTO);
     }
+
+    @DeleteMapping("/{idloan}")
+    public void deleteLoanById(@PathVariable Long idloan) throws LoanNotFoundException {
+        loanService.deleteLoanById(idloan);
+    }
+
 
 }

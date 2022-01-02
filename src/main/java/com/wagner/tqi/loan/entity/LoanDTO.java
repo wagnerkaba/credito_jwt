@@ -14,4 +14,5 @@ public class LoanDTO {
     private LocalDate primeiraParcela;
     private int qtdParcelas;
     private int codigo;
+    private Long idPerson;
 }
