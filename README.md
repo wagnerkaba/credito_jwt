@@ -7,4 +7,5 @@
 - Spring Web
 - Lombok
 - Spring Security
+- Swagger
 
