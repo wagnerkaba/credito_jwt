@@ -1,5 +1,7 @@
 package com.wagner.tqi.loan;
 
+import com.wagner.tqi.loan.entity.Loan;
+import com.wagner.tqi.loan.entity.LoanDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,9 @@ public class LoanController {
         return loanService.getAllLoans();
     }
 
-    @PostMapping
-    public void createLoan(@RequestBody Loan loan){
-        loanService.createLoan(loan);
+    @PostMapping("/{idperson}")
+    public void createLoan(@PathVariable Long idperson, @RequestBody LoanDTO loanDTO){
+        loanService.createLoan(loanDTO, idperson);
     }
 
 }

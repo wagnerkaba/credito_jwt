@@ -1,10 +1,7 @@
-package com.wagner.tqi.loan;
+package com.wagner.tqi.loan.entity;
 
 import com.wagner.tqi.person.entity.Person;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,6 +11,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
