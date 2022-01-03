@@ -28,17 +28,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable();
-//                .authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/api/v1/**").permitAll()
-//                .antMatchers("/autenticado").permitAll()
-//                .antMatchers("/inicio/login").permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .formLogin().permitAll()
-//                .defaultSuccessUrl("/home", true);
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/api/v1/**").permitAll()
+                .antMatchers("/autenticado").permitAll()
+                .antMatchers("/inicio/login").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin().permitAll()
+                .defaultSuccessUrl("/home", true);
 
 
 

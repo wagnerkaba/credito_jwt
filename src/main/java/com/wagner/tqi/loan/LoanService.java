@@ -2,10 +2,10 @@ package com.wagner.tqi.loan;
 
 import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
-import com.wagner.tqi.loan.exception.LoanNotFoundException;
-import com.wagner.tqi.loan.exception.LoanNotValidException;
+import com.wagner.tqi.exception.LoanNotFoundException;
+import com.wagner.tqi.exception.LoanNotValidException;
 import com.wagner.tqi.person.entity.Person;
-import com.wagner.tqi.person.exception.PersonNotFoundException;
+import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,4 +83,15 @@ public class LoanService {
     }
 
 
+    public List<Loan> getLoansByClienteEmail() {
+
+        List<Loan> loansByPersonEmail = loanRepository.findByCliente_Email("admin@gmail.com");
+
+
+
+        return loansByPersonEmail;
+
+
+
+    }
 }

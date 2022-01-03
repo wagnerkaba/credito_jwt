@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.wagner.tqi.person.dto.request.PersonDTO;
 import com.wagner.tqi.person.dto.response.MessageResponseDTO;
 import com.wagner.tqi.person.entity.Person;
-import com.wagner.tqi.person.exception.PersonNotFoundException;
+import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.mapper.PersonMapper;
 import com.wagner.tqi.person.repository.PersonRepository;
 

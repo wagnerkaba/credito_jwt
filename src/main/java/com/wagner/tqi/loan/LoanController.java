@@ -2,9 +2,9 @@ package com.wagner.tqi.loan;
 
 import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
-import com.wagner.tqi.loan.exception.LoanNotFoundException;
-import com.wagner.tqi.loan.exception.LoanNotValidException;
-import com.wagner.tqi.person.exception.PersonNotFoundException;
+import com.wagner.tqi.exception.LoanNotFoundException;
+import com.wagner.tqi.exception.LoanNotValidException;
+import com.wagner.tqi.exception.PersonNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +22,13 @@ public class LoanController {
     public List<Loan> getAllLoans(){
         return loanService.getAllLoans();
     }
+
+    @GetMapping("/listaporcliente")
+    public List<Loan> getLoansByPersonEmail(){
+        return loanService.getLoansByClienteEmail();
+    }
+
+
 
     @PostMapping
     public void createLoan(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException, LoanNotValidException {

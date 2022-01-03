@@ -1,4 +1,4 @@
-package com.wagner.tqi.person.exception;
+package com.wagner.tqi.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
