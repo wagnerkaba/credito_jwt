@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,18 +28,29 @@ public class LoanService {
     private LoanRepository loanRepository;
     private PersonRepository personRepository;
 
+    //cria empréstimo somente para o usuário logado no sistema
+    @Transactional //Uma transação garante que qualquer processo deva ser executado com êxito, é “tudo ou nada” (princípio da atomicidade).
     public void createLoan(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
 
+        // resgata email do usuário que está logado no sistema
+        String email = getAuthenticatedUser();
 
-        Optional<Person> optionalPerson = personRepository.findById(loanDTO.getIdPerson());
+        // se usuário não estiver logado no sistema, lança exceção
+        if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
 
-        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException(loanDTO.getIdPerson().toString()));
+        // faz busca do objeto Person com o email do usuário
+        Optional<Person> optionalPerson = personRepository.findByEmail(email);
 
-        //a data do pedido é a data atual
+        // se o objeto Person não existir, lança exceção
+        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException("Para criar empréstimo é preciso estar logado no sistema"));
+
+        //estabelece a data do pedido como a data atual
         loanDTO.setDataPedido(LocalDate.now());
 
+        // verifica se o empréstimo está de acordo com as regras do negócio
         isLoanValid(loanDTO);
 
+        // cria nova solicitação de empréstimo
         Loan loan = new Loan(
                 null,
                 loanDTO.getValor(),
@@ -63,31 +75,9 @@ public class LoanService {
 
     }
 
-    private Loan verifyIfLoanExists(Long idloan) throws LoanNotFoundException {
-
-        return loanRepository.findById(idloan)
-                .orElseThrow(()->new LoanNotFoundException(idloan));
-    }
-
-    private boolean isLoanValid(LoanDTO loanDTO) throws LoanBadRequestException {
-
-        // o empréstimo pode ter no máximo 60 parcelas
-        if (loanDTO.getQtdParcelas() < 1 || loanDTO.getQtdParcelas() > 60) {
-            throw new LoanBadRequestException("O empréstimo deve ter entre 1 e 60 parcelas");
-        }
-
-        // a data da primeira parcela deve ser no máximo 3 meses após o dia atual
-        LocalDate prazoMaximoEmprestimo = loanDTO.getDataPedido().plusMonths(3);
-        if (loanDTO.getPrimeiraParcela().isBefore(loanDTO.getDataPedido()) || loanDTO.getPrimeiraParcela().isAfter(prazoMaximoEmprestimo)){
-            throw new LoanBadRequestException("A data da primeira parcela deve ser desde o dia do pedido até o prazo máximo de três meses");
-        }
 
 
-
-        return true;
-    }
-
-    // busca todos os emréstimos do usuário logado no sistema
+    // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com o código do empréstimo, o valor e a quantidade de parcelas.
     public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
 
@@ -103,7 +93,7 @@ public class LoanService {
         return loansByClienteEmail;
     }
 
-    // busca todos os emréstimos do usuário logado no sistema
+    // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
     public List<LoanDetailedList> getDetailedLoansByClienteEmail() throws LoanBadRequestException {
         // busca qual usuário está logado no sistema
@@ -128,6 +118,32 @@ public class LoanService {
             return auth.getName();
         }
         return null;
+    }
+
+    // verifica se uma solicitação de empréstimo existe
+    private Loan verifyIfLoanExists(Long idloan) throws LoanNotFoundException {
+
+        return loanRepository.findById(idloan)
+                .orElseThrow(()->new LoanNotFoundException(idloan));
+    }
+
+    // verifica se empréstimo está de acordo com as regras do negócio
+    private boolean isLoanValid(LoanDTO loanDTO) throws LoanBadRequestException {
+
+        // o empréstimo pode ter no máximo 60 parcelas
+        if (loanDTO.getQtdParcelas() < 1 || loanDTO.getQtdParcelas() > 60) {
+            throw new LoanBadRequestException("O empréstimo deve ter entre 1 e 60 parcelas");
+        }
+
+        // a data da primeira parcela deve ser no máximo 3 meses após o dia atual
+        LocalDate prazoMaximoEmprestimo = loanDTO.getDataPedido().plusMonths(3);
+        if (loanDTO.getPrimeiraParcela().isBefore(loanDTO.getDataPedido()) || loanDTO.getPrimeiraParcela().isAfter(prazoMaximoEmprestimo)){
+            throw new LoanBadRequestException("A data da primeira parcela deve ser desde o dia do pedido até o prazo máximo de três meses");
+        }
+
+
+
+        return true;
     }
 
 
