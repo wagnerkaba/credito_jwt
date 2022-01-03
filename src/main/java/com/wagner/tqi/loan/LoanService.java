@@ -3,12 +3,15 @@ package com.wagner.tqi.loan;
 import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
 import com.wagner.tqi.exception.LoanNotFoundException;
-import com.wagner.tqi.exception.LoanNotValidException;
+import com.wagner.tqi.exception.LoanBadRequestException;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,7 +25,7 @@ public class LoanService {
     private LoanRepository loanRepository;
     private PersonRepository personRepository;
 
-    public void createLoan(LoanDTO loanDTO) throws PersonNotFoundException, LoanNotValidException {
+    public void createLoan(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
 
 
         Optional<Person> optionalPerson = personRepository.findById(loanDTO.getIdPerson());
@@ -64,17 +67,17 @@ public class LoanService {
                 .orElseThrow(()->new LoanNotFoundException(idloan));
     }
 
-    private boolean isLoanValid(LoanDTO loanDTO) throws LoanNotValidException {
+    private boolean isLoanValid(LoanDTO loanDTO) throws LoanBadRequestException {
 
         // o empréstimo pode ter no máximo 60 parcelas
         if (loanDTO.getQtdParcelas() < 1 || loanDTO.getQtdParcelas() > 60) {
-            throw new LoanNotValidException("O empréstimo deve ter entre 1 e 60 parcelas");
+            throw new LoanBadRequestException("O empréstimo deve ter entre 1 e 60 parcelas");
         }
 
         // a data da primeira parcela deve ser no máximo 3 meses após o dia atual
         LocalDate prazoMaximoEmprestimo = loanDTO.getDataPedido().plusMonths(3);
         if (loanDTO.getPrimeiraParcela().isBefore(loanDTO.getDataPedido()) || loanDTO.getPrimeiraParcela().isAfter(prazoMaximoEmprestimo)){
-            throw new LoanNotValidException("A data da primeira parcela deve ser desde o dia do pedido até o prazo máximo de três meses");
+            throw new LoanBadRequestException("A data da primeira parcela deve ser desde o dia do pedido até o prazo máximo de três meses");
         }
 
 
@@ -82,16 +85,29 @@ public class LoanService {
         return true;
     }
 
+    // busca todos os emréstimos do usuário logado no sistema
+    public List<Loan> getLoansByClienteEmail() throws LoanBadRequestException {
 
-    public List<Loan> getLoansByClienteEmail() {
+        // busca qual usuário está logado no sistema
+        String email = getAuthenticatedUser();
 
-        List<Loan> loansByPersonEmail = loanRepository.findByCliente_Email("admin@gmail.com");
+        // se usuário não estiver logado no sistema, lança exceção
+        if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
 
-
+        // busca todos os empréstimos do usuário logado no sistema
+        List<Loan> loansByPersonEmail = loanRepository.findByCliente_Email(email);
 
         return loansByPersonEmail;
-
-
-
     }
+
+    // busca email do usuário logado no sistema
+    // se usuário não estiver logado, retorna null
+    private String getAuthenticatedUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return auth.getName();
+        }
+        return null;
+    }
+
 }

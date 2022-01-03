@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class LoanNotValidException extends Exception{
+public class LoanBadRequestException extends Exception{
 
-    public LoanNotValidException(String mensagem) {
-        super("Empréstimo não é válido. Motivo: " + mensagem);
+    public LoanBadRequestException(String mensagem) {
+        super(mensagem);
     }
 }

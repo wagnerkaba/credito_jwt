@@ -31,8 +31,8 @@ public class TemplateController {
     public String getAutenticado(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
-            System.out.println(auth.getPrincipal());
-            System.out.println("AUTENTICADO: " + auth.getPrincipal());
+            System.out.println("USUÁRIO AUTENTICADO");
+            System.out.println("BEM VINDO " + auth.getName());
             return "home";
         }
         System.out.println("NÃO autenticado");

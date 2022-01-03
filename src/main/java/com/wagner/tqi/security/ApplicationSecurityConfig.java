@@ -1,7 +1,7 @@
 package com.wagner.tqi.security;
 
 
-import com.wagner.tqi.user.ApplicationUserService;
+import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static com.wagner.tqi.security.ApplicationUserRole.*;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +22,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final ApplicationUserService applicationUserService;
+    private final ApplicationUserDetailsService applicationUserDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -53,7 +52,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService);
+        provider.setUserDetailsService(applicationUserDetailsService);
         return provider;
     }
 

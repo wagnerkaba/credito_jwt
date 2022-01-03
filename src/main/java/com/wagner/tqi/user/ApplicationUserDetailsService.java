@@ -1,12 +1,7 @@
 package com.wagner.tqi.user;
 
-import com.wagner.tqi.exception.PersonNotFoundException;
-import com.wagner.tqi.person.dto.request.PersonDTO;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.person.repository.PersonRepository;
-import com.wagner.tqi.security.ApplicationUserRole;
-import lombok.SneakyThrows;
-import org.hibernate.boot.model.source.spi.PluralAttributeElementSourceOneToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +13,7 @@ import java.util.Optional;
 
 
 @Service
-public class ApplicationUserService implements UserDetailsService {
+public class ApplicationUserDetailsService implements UserDetailsService {
 
     @Autowired
     PersonRepository personRepository;
