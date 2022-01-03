@@ -4,6 +4,7 @@ import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
 import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.LoanBadRequestException;
+import com.wagner.tqi.loan.entity.LoanDetailedList;
 import com.wagner.tqi.loan.entity.LoanSimpleList;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.exception.PersonNotFoundException;
@@ -87,6 +88,7 @@ public class LoanService {
     }
 
     // busca todos os emréstimos do usuário logado no sistema
+    // retorna JPA Projection com o código do empréstimo, o valor e a quantidade de parcelas.
     public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
 
         // busca qual usuário está logado no sistema
@@ -96,10 +98,27 @@ public class LoanService {
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
 
         // busca todos os empréstimos do usuário logado no sistema
-        List<LoanSimpleList> loansByPersonEmail = loanRepository.findByCliente_Email(email);
+        List<LoanSimpleList> loansByClienteEmail = loanRepository.findByCliente_Email(email, LoanSimpleList.class);
 
-        return loansByPersonEmail;
+        return loansByClienteEmail;
     }
+
+    // busca todos os emréstimos do usuário logado no sistema
+    // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
+    public List<LoanDetailedList> getDetailedLoansByClienteEmail() throws LoanBadRequestException {
+        // busca qual usuário está logado no sistema
+        String email = getAuthenticatedUser();
+
+        // se usuário não estiver logado no sistema, lança exceção
+        if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
+
+        // busca todos os empréstimos do usuário logado no sistema
+        List<LoanDetailedList> detailedLoans = loanRepository.findByCliente_Email(email, LoanDetailedList.class);
+
+        return detailedLoans;
+
+    }
+
 
     // busca email do usuário logado no sistema
     // se usuário não estiver logado, retorna null
@@ -110,5 +129,6 @@ public class LoanService {
         }
         return null;
     }
+
 
 }

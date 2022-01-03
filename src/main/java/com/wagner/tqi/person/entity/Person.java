@@ -38,6 +38,8 @@ public class Person {
 
     private LocalDate birthDate;
 
+    private Long renda;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Phone> phones;
 

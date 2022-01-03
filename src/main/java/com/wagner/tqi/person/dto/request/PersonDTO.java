@@ -38,6 +38,8 @@ public class PersonDTO {
 
     private String birthDate;
 
+    private Long renda;
+
     @NotEmpty
     @Valid
     private List<PhoneDTO> phones;
