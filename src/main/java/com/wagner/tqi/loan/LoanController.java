@@ -29,23 +29,23 @@ public class LoanController {
     // busca todos os empréstimos do usuário logado no sistema
     // Na listagem, retorna o código do empréstimo, o valor e a quantidade de parcelas.
     @GetMapping("/listaporcliente")
-    public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
-        return loanService.getLoansByClienteEmail();
+    public List<LoanSimpleList> getLoansByLoggedUser() throws LoanBadRequestException {
+        return loanService.getLoansByLoggedUser();
     }
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
     @GetMapping("/listaporcliente/detalhes")
-    public List<LoanDetailedList> getDetailedLoansByClienteEmail() throws LoanBadRequestException {
-        return loanService.getDetailedLoansByClienteEmail();
+    public List<LoanDetailedList> getDetailedLoansByLoggedUser() throws LoanBadRequestException {
+        return loanService.getDetailedLoansByLoggedUser();
     }
 
 
 
     // faz solicitação de novo empréstimo
     @PostMapping
-    public void createLoan(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
-        loanService.createLoan(loanDTO);
+    public void createLoanByLoggedUser(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
+        loanService.createLoanByLoggedUser(loanDTO);
     }
 
     // apaga empréstimo

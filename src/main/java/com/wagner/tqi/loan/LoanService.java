@@ -30,10 +30,10 @@ public class LoanService {
 
     //cria empréstimo somente para o usuário logado no sistema
     @Transactional //Uma transação garante que qualquer processo deva ser executado com êxito, é “tudo ou nada” (princípio da atomicidade).
-    public void createLoan(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
+    public void createLoanByLoggedUser(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
 
         // resgata email do usuário que está logado no sistema
-        String email = getAuthenticatedUser();
+        String email = getLoggedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
@@ -79,10 +79,10 @@ public class LoanService {
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com o código do empréstimo, o valor e a quantidade de parcelas.
-    public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
+    public List<LoanSimpleList> getLoansByLoggedUser() throws LoanBadRequestException {
 
         // busca qual usuário está logado no sistema
-        String email = getAuthenticatedUser();
+        String email = getLoggedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
@@ -95,9 +95,9 @@ public class LoanService {
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
-    public List<LoanDetailedList> getDetailedLoansByClienteEmail() throws LoanBadRequestException {
+    public List<LoanDetailedList> getDetailedLoansByLoggedUser() throws LoanBadRequestException {
         // busca qual usuário está logado no sistema
-        String email = getAuthenticatedUser();
+        String email = getLoggedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
@@ -112,7 +112,7 @@ public class LoanService {
 
     // busca email do usuário logado no sistema
     // se usuário não estiver logado, retorna null
-    private String getAuthenticatedUser(){
+    private String getLoggedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             return auth.getName();
