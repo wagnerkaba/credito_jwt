@@ -1,9 +1,11 @@
 package com.wagner.tqi.user;
 
+import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.dto.request.PersonDTO;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.person.repository.PersonRepository;
 import com.wagner.tqi.security.ApplicationUserRole;
+import lombok.SneakyThrows;
 import org.hibernate.boot.model.source.spi.PluralAttributeElementSourceOneToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,12 +26,18 @@ public class ApplicationUserService implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username){
 
         Optional<Person> optionalPerson = personRepository.findByEmail(username);
 
-        Person person = optionalPerson.orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente: " + username));
+        // se usuário não for encontrado, lança exceção UsernameNotFoundException
+        // OBS: Não utilizar PersonNotFoundException aqui.
+        // UsernameNotFoundException mostra mensagem "Bad Credentials". Ou seja, mensagem genérica.
+        // PersonNotFoundException deixa explícito que usuário não existe
+        // Em tela de login, é melhor não expor o motivo do usuário não conseguir logar
+        Person person = optionalPerson.orElseThrow(() -> new UsernameNotFoundException(username));
 
         ApplicationUserDetails applicationUserDetails = personToUserDetails(person);
 

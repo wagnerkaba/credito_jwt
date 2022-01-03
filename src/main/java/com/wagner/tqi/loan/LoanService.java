@@ -27,7 +27,7 @@ public class LoanService {
 
         Optional<Person> optionalPerson = personRepository.findById(loanDTO.getIdPerson());
 
-        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException(loanDTO.getIdPerson()));
+        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException(loanDTO.getIdPerson().toString()));
 
         //a data do pedido é a data atual
         loanDTO.setDataPedido(LocalDate.now());
