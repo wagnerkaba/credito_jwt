@@ -4,6 +4,7 @@ import com.wagner.tqi.loan.entity.Loan;
 import com.wagner.tqi.loan.entity.LoanDTO;
 import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.LoanBadRequestException;
+import com.wagner.tqi.loan.entity.LoanSimpleList;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.repository.PersonRepository;
@@ -86,7 +87,7 @@ public class LoanService {
     }
 
     // busca todos os emréstimos do usuário logado no sistema
-    public List<Loan> getLoansByClienteEmail() throws LoanBadRequestException {
+    public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
 
         // busca qual usuário está logado no sistema
         String email = getAuthenticatedUser();
@@ -95,7 +96,7 @@ public class LoanService {
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
 
         // busca todos os empréstimos do usuário logado no sistema
-        List<Loan> loansByPersonEmail = loanRepository.findByCliente_Email(email);
+        List<LoanSimpleList> loansByPersonEmail = loanRepository.findByCliente_Email(email);
 
         return loansByPersonEmail;
     }

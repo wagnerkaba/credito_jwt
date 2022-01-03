@@ -5,6 +5,7 @@ import com.wagner.tqi.loan.entity.LoanDTO;
 import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.LoanBadRequestException;
 import com.wagner.tqi.exception.PersonNotFoundException;
+import com.wagner.tqi.loan.entity.LoanSimpleList;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,9 @@ public class LoanController {
     }
 
     // busca todos os empréstimos do usuário logado no sistema
+    // Na listagem, retorna o código do empréstimo, o valor e a quantidade de parcelas.
     @GetMapping("/listaporcliente")
-    public List<Loan> getLoansByClienteEmail() throws LoanBadRequestException {
+    public List<LoanSimpleList> getLoansByClienteEmail() throws LoanBadRequestException {
         return loanService.getLoansByClienteEmail();
     }
 
