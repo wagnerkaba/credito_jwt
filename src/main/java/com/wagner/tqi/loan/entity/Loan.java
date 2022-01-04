@@ -1,5 +1,6 @@
 package com.wagner.tqi.loan.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wagner.tqi.person.entity.Person;
 import lombok.*;
 

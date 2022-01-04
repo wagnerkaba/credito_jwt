@@ -34,11 +34,21 @@ public class PersonDTO {
     @NotEmpty
     private String email;
 
+    @NotEmpty
     private String password;
 
-    private String birthDate;
 
     private Long renda;
+
+    private String rg;
+    private String endereco;
+    private String enderecoNumero;
+    private String bairro;
+    private String cep;
+    private String cidade;
+    private String estado;
+    private String pais;
+
 
     @NotEmpty
     @Valid

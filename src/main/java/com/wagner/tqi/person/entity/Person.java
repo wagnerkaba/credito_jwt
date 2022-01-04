@@ -36,9 +36,17 @@ public class Person {
     private String password;
 
 
-    private LocalDate birthDate;
 
     private Long renda;
+
+    private String rg;
+    private String endereco;
+    private String enderecoNumero;
+    private String bairro;
+    private String cep;
+    private String cidade;
+    private String estado;
+    private String pais;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Phone> phones;
