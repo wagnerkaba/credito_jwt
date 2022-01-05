@@ -1,4 +1,5 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,6 +17,11 @@
     <form class="form-signin" method="get" action="/logout">
         <h1>Home</h1>
         <p>Spring Boot Security</p>
+
+        <div align="center">
+            <h1>Register Succeeded</h1>
+            <span>Full name:</span><span th:text="${email}"></span><br/>
+        </div>
         <button class="btn btn-primary btn-block" type="submit">Logout</button>
     </form>
 </div>
