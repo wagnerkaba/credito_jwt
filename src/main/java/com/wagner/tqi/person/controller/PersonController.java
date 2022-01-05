@@ -34,6 +34,9 @@ public class PersonController {
         return personService.findById(id);
     }
 
+
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasAuthority('person:write')")

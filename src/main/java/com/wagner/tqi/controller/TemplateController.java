@@ -1,5 +1,7 @@
 package com.wagner.tqi.controller;
 
+import com.wagner.tqi.person.dto.request.PersonDTO;
+import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.user.ApplicationUserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,14 @@ public class TemplateController {
         return "home";
     }
 
+    @GetMapping("/register")
+    public String showForm(Model model){
+
+        PersonDTO personDTO = new PersonDTO();
+        model.addAttribute("persondto", personDTO);
+
+        return "register";
+    }
 
 
 //  endpoint com fim de fazer testes para verificar se o usuário está autenticado no sistema
