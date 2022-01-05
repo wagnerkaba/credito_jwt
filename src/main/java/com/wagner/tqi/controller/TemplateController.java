@@ -20,34 +20,22 @@ public class TemplateController {
     }
 
     @GetMapping("/home")
-    public String getCourses(){
+    public String getCourses(Model model){
+
+        String loggedUser = ApplicationUserDetailsService.getLoggedUser();
+
+        if (loggedUser==null) loggedUser="Usuário não logado";
+
+        model.addAttribute("email", loggedUser);
 
         System.out.println("home");
         return "home";
     }
 
-    @GetMapping("/register")
-    public String showForm(Model model){
-
-        PersonDTO personDTO = new PersonDTO();
-        model.addAttribute("persondto", personDTO);
-
-        return "register";
-    }
 
 
-//  endpoint com fim de fazer testes para verificar se o usuário está autenticado no sistema
-    @GetMapping("/autenticado")
-    public String getAutenticado(Model model){
 
-        String loggedUser = ApplicationUserDetailsService.getLoggedUser();
 
-        model.addAttribute("email", loggedUser);
-
-        if (loggedUser!=null) return "home";
-            else return "pagina_de_login";
-
-    }
 
 
 
