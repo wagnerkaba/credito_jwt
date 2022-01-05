@@ -16,12 +16,14 @@
 
     <form class="form-signin" method="get" action="/logout">
         <h1>Home</h1>
-        <p>Spring Boot Security</p>
+        <p>Bem vindo!</p>
 
-        <div align="center">
-            <h1>Register Succeeded</h1>
-            <span>Full name:</span><span th:text="${email}"></span><br/>
-        </div>
+        <span align="center">
+            <span>Você está logado como:</span>
+            <span th:text="${email}"></span>
+            <br/>
+
+        </span>
         <button class="btn btn-primary btn-block" type="submit">Logout</button>
     </form>
 </div>
