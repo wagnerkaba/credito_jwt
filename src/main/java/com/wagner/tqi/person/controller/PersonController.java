@@ -25,6 +25,7 @@ public class PersonController {
     @GetMapping
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
     public List<PersonDTO> listAll(){
+
         return personService.listAll();
     }
 
