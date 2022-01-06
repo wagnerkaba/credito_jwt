@@ -41,7 +41,7 @@ public class PersonServiceTest {
 
         MessageResponseDTO expectedSuccessMessage = createExpectedSuccessMessage(expectedSavedPerson.getId());
 
-        MessageResponseDTO successMessage = personService.createPerson(personDTO);
+        MessageResponseDTO successMessage = personService.createPerson(personDTO, false);
 
         Assertions.assertEquals(expectedSuccessMessage, successMessage);
     }

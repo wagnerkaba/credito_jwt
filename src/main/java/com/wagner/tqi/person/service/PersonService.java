@@ -26,28 +26,27 @@ public class PersonService {
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
-    // método para que qualquer pessoa consiga se cadastrar sozinha
-    public MessageResponseDTO registerPerson(PersonDTO personDTO) {
+
+    // método para criar novos usuários
+    public MessageResponseDTO createPerson(PersonDTO personDTO, boolean isAnonymous){
+        String user = null;
+
         Person personToSave = personMapper.toModel(personDTO);
 
-        // como qualquer pessoa pode criar cadastro, o ROLE obrigatoriamente é CUSTOMER
-        // para criar pessoas com ROLE de ADMIN é preciso acessar outro endpoint
-        personToSave.setUserRole(ApplicationUserRole.CUSTOMER);
+        // se a variavel isAnonymous é verdadeira, significa que a origem do pedido foi o endpoint "/register"
+        // nesse caso, o usuário criado é automaticamente do ROLE CUSTOMER
+        if (isAnonymous) personToSave.setUserRole(ApplicationUserRole.CUSTOMER);
 
         Person savedPerson = personRepository.save(personToSave);
 
-        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", savedPerson.getEmail());
-    }
+        // verifica o usuário logado para colocar o autor do request no response
+        user = ApplicationUserDetailsService.getAuthenticatedUser();
 
+        // se user == null isso significa que não tem nenhum usuário autenticado
+        // nesse caso, presume-se que o autor do request é o savedPerson
+        if (user==null) user = savedPerson.getEmail();
 
-    public MessageResponseDTO createPerson(PersonDTO personDTO){
-        Person personToSave = personMapper.toModel(personDTO);
-        Person savedPerson = personRepository.save(personToSave);
-
-        // verifica o usuário logado para colocar no response
-        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
-
-        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", authenticatedUser);
+        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", user);
     }
 
     public List<PersonDTO> listAll() {

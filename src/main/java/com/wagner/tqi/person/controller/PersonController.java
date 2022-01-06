@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,15 +42,16 @@ public class PersonController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasAuthority('person:write')")
-    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO){
-        return personService.createPerson(personDTO);
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
+
+        return personService.createPerson(personDTO, false);
     }
 
     // endpoint para qualquer pessoa criar um cadastro
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO registerPerson(@RequestBody @Valid PersonDTO personDTO){
-        return personService.registerPerson(personDTO);
+        return personService.createPerson(personDTO, true);
     }
 
 
