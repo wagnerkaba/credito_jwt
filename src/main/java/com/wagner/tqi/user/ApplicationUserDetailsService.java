@@ -29,6 +29,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
     public static String getAuthenticatedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
+
+
             return auth.getName();
         }
         return null;

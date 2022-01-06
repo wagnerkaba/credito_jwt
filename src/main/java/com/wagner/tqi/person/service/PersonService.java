@@ -1,6 +1,7 @@
 package com.wagner.tqi.person.service;
 
 
+import com.wagner.tqi.security.ApplicationUserRole;
 import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,18 @@ public class PersonService {
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
+    // método para que qualquer pessoa consiga se cadastrar sozinha
+    public MessageResponseDTO registerPerson(PersonDTO personDTO) {
+        Person personToSave = personMapper.toModel(personDTO);
 
+        // como qualquer pessoa pode criar cadastro, o ROLE obrigatoriamente é CUSTOMER
+        // para criar pessoas com ROLE de ADMIN é preciso acessar outro endpoint
+        personToSave.setUserRole(ApplicationUserRole.CUSTOMER);
+
+        Person savedPerson = personRepository.save(personToSave);
+
+        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", savedPerson.getEmail());
+    }
 
 
     public MessageResponseDTO createPerson(PersonDTO personDTO){

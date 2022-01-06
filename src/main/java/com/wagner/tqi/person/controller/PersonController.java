@@ -37,13 +37,21 @@ public class PersonController {
 
 
 
-
+    //endpoint para ADMIN criar cadastro de pessoas
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasAuthority('person:write')")
     public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO){
         return personService.createPerson(personDTO);
     }
+
+    // endpoint para qualquer pessoa criar um cadastro
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageResponseDTO registerPerson(@RequestBody @Valid PersonDTO personDTO){
+        return personService.registerPerson(personDTO);
+    }
+
 
 
     @DeleteMapping("/{id}")
