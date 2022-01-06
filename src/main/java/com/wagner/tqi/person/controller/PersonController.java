@@ -1,6 +1,7 @@
 package com.wagner.tqi.person.controller;
 
 
+import com.wagner.tqi.exception.PersonBadRequestException;
 import com.wagner.tqi.person.dto.request.PersonDTO;
 import com.wagner.tqi.response.MessageResponseDTO;
 import com.wagner.tqi.exception.PersonNotFoundException;
@@ -65,7 +66,7 @@ public class PersonController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('person:write')")
-    public MessageResponseDTO updateById(@PathVariable  Long id,@RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+    public MessageResponseDTO updateById(@PathVariable  Long id,@RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException, PersonBadRequestException {
         return personService.updateById(id, personDTO);
 
 

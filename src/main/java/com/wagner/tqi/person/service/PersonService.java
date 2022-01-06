@@ -30,7 +30,6 @@ public class PersonService {
 
 
     // método para criar novos usuários
-    @SneakyThrows
     public MessageResponseDTO createPerson(PersonDTO personDTO, boolean isAnonymous) {
         String user = null;
         Person savedPerson = null;
@@ -41,13 +40,9 @@ public class PersonService {
         // nesse caso, o usuário criado é automaticamente do ROLE CUSTOMER
         if (isAnonymous) personToSave.setUserRole(ApplicationUserRole.CUSTOMER);
 
-        try {
-            savedPerson = personRepository.save(personToSave);
-        } catch (Exception e){
+        // tenta salvar pessoa no banco de dados
+        savedPerson = tryToSave(personToSave);
 
-            //se houve erro ao salvar person no banco de dados, a causa mais provável é que já existe usuário com os mesmos dados
-            throw new PersonBadRequestException("POSSÍVEL DUPLICAÇÃO DE DADOS: VERIFIQUE SE USUÁRIO COM MESMOS DADOS JÁ FOI CRIADO");
-        }
 
         // verifica o usuário logado para colocar o autor do request no response
         user = ApplicationUserDetailsService.getAuthenticatedUser();
@@ -88,11 +83,19 @@ public class PersonService {
         return createMessageResponseDTO(id, "Removido pessoa com ID:", authenticatedUser);
     }
 
-    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException, PersonBadRequestException {
 
         verifyIfExists(id);
+
+        // verifica se existe conflito entre id e PersonDTO.getId()
+        if (personDTO.getId() != id) throw new PersonBadRequestException("USUÁRIO NÃO PODE SER ALTERADO. EXISTE ERRO NO ID INFORMADO.");
+
+
         Person personToUpdate = personMapper.toModel(personDTO);
-        Person updatedPerson = personRepository.save(personToUpdate);
+
+        // tenta salvar person no banco de dados
+        Person updatedPerson = tryToSave(personToUpdate);
 
         // verifica o usuário logado para colocar no response
         String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
@@ -104,6 +107,21 @@ public class PersonService {
     private Person verifyIfExists(Long id) throws PersonNotFoundException {
         return personRepository.findById(id)
                 .orElseThrow(()-> new PersonNotFoundException(id.toString()));
+    }
+
+    @SneakyThrows
+    // tenta salvar Person no banco de dados. Se não conseguir, lança exceção
+    private Person tryToSave(Person personToSave){
+        Person savedPerson = new Person();
+
+        try {
+             savedPerson = personRepository.save(personToSave);
+             return savedPerson;
+        } catch (Exception e){
+
+            //se houve erro ao salvar person no banco de dados, a causa mais provável é que já existe usuário com os mesmos dados
+            throw new PersonBadRequestException("POSSÍVEL DUPLICAÇÃO DE DADOS: VERIFIQUE SE USUÁRIO COM MESMOS DADOS JÁ FOI CRIADO");
+        }
     }
 
 
