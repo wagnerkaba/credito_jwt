@@ -1,11 +1,13 @@
 package com.wagner.tqi.jwt;
 
 import com.google.common.base.Strings;
+import com.wagner.tqi.exception.PersonNotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -86,7 +88,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         } catch (JwtException e){
 
             // se o token jwt não é válido, lança uma exceção
-            throw new IllegalStateException("Token cannot be trusted: " + token);
+            throw new IllegalStateException("O TOKEN JWT ENVIADO NÃO É CONFIÁVEL. VERIFIQUE O TOKEN JWT NO ENDEREÇO https://jwt.io/     ======     TOKEN:" + token);
+
+
         }
 
 
