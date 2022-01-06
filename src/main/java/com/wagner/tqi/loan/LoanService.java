@@ -9,12 +9,10 @@ import com.wagner.tqi.loan.entity.LoanSimpleList;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.repository.PersonRepository;
+import com.wagner.tqi.response.MessageResponseDTO;
 import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,10 +29,10 @@ public class LoanService {
 
     //cria empréstimo somente para o usuário logado no sistema
     @Transactional //Uma transação garante que qualquer processo deva ser executado com êxito, é “tudo ou nada” (princípio da atomicidade).
-    public void createLoanByLoggedUser(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
+    public MessageResponseDTO createLoanByAuthenticatedUser(LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
 
         // resgata email do usuário que está logado no sistema
-        String email = ApplicationUserDetailsService.getLoggedUser();
+        String email = ApplicationUserDetailsService.getAuthenticatedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
@@ -43,7 +41,7 @@ public class LoanService {
         Optional<Person> optionalPerson = personRepository.findByEmail(email);
 
         // se o objeto Person não existir, lança exceção
-        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException("Para criar empréstimo é preciso estar logado no sistema"));
+        Person person = optionalPerson.orElseThrow(() -> new PersonNotFoundException(email));
 
         //estabelece a data do pedido como a data atual
         loanDTO.setDataPedido(LocalDate.now());
@@ -62,28 +60,37 @@ public class LoanService {
                 1 //Código do empréstimo a ser definito pelas regras de negócio
         );
 
-        loanRepository.save(loan);
+        Loan savedLoan = loanRepository.save(loan);
+
+        // verifica o usuário logado para colocar no response
+        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+
+        return MessageResponseDTO.createMessageResponseDTO(savedLoan.getId(), "Criado emprétimo com ID:", authenticatedUser);
     }
 
     public List<Loan> getAllLoans(){
         return loanRepository.findAll();
     }
 
-    public void deleteLoanById(Long idloan) throws LoanNotFoundException {
+    public MessageResponseDTO deleteLoanById(Long idloan) throws LoanNotFoundException {
 
         verifyIfLoanExists(idloan);
         loanRepository.deleteById(idloan);
 
+        // verifica o usuário logado para colocar no response
+        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+
+        return MessageResponseDTO.createMessageResponseDTO(idloan, "Removido empréstimo com ID:", authenticatedUser);
     }
 
 
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com o código do empréstimo, o valor e a quantidade de parcelas.
-    public List<LoanSimpleList> getLoansByLoggedUser() throws LoanBadRequestException {
+    public List<LoanSimpleList> getLoansByAuthenticatedUser() throws LoanBadRequestException {
 
         // busca qual usuário está logado no sistema
-        String email = ApplicationUserDetailsService.getLoggedUser();
+        String email = ApplicationUserDetailsService.getAuthenticatedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");
@@ -96,9 +103,9 @@ public class LoanService {
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
-    public List<LoanDetailedList> getDetailedLoansByLoggedUser() throws LoanBadRequestException {
+    public List<LoanDetailedList> getDetailedLoansByAuthenticatedUser() throws LoanBadRequestException {
         // busca qual usuário está logado no sistema
-        String email = ApplicationUserDetailsService.getLoggedUser();
+        String email = ApplicationUserDetailsService.getAuthenticatedUser();
 
         // se usuário não estiver logado no sistema, lança exceção
         if (email == null) throw new LoanBadRequestException("Usuário precisa estar autenticado.");

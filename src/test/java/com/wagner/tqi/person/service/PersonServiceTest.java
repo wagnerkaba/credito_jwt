@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.wagner.tqi.person.dto.request.PersonDTO;
-import com.wagner.tqi.person.dto.response.MessageResponseDTO;
+import com.wagner.tqi.response.MessageResponseDTO;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.person.mapper.PersonMapper;
 import com.wagner.tqi.person.repository.PersonRepository;

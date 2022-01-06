@@ -7,6 +7,7 @@ import com.wagner.tqi.exception.LoanBadRequestException;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.loan.entity.LoanDetailedList;
 import com.wagner.tqi.loan.entity.LoanSimpleList;
+import com.wagner.tqi.response.MessageResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,29 +30,29 @@ public class LoanController {
     // busca todos os empréstimos do usuário logado no sistema
     // Na listagem, retorna o código do empréstimo, o valor e a quantidade de parcelas.
     @GetMapping("/listaporcliente")
-    public List<LoanSimpleList> getLoansByLoggedUser() throws LoanBadRequestException {
-        return loanService.getLoansByLoggedUser();
+    public List<LoanSimpleList> getLoansByAuthenticatedUser() throws LoanBadRequestException {
+        return loanService.getLoansByAuthenticatedUser();
     }
 
     // busca todos os empréstimos do usuário logado no sistema
     // retorna JPA Projection com código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
     @GetMapping("/listaporcliente/detalhes")
-    public List<LoanDetailedList> getDetailedLoansByLoggedUser() throws LoanBadRequestException {
-        return loanService.getDetailedLoansByLoggedUser();
+    public List<LoanDetailedList> getDetailedLoansByAuthenticatedUser() throws LoanBadRequestException {
+        return loanService.getDetailedLoansByAuthenticatedUser();
     }
 
 
 
     // faz solicitação de novo empréstimo
     @PostMapping
-    public void createLoanByLoggedUser(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
-        loanService.createLoanByLoggedUser(loanDTO);
+    public MessageResponseDTO createLoanByAuthenticatedUser(@RequestBody LoanDTO loanDTO) throws PersonNotFoundException, LoanBadRequestException {
+        return loanService.createLoanByAuthenticatedUser(loanDTO);
     }
 
     // apaga empréstimo
     @DeleteMapping("/{idloan}")
-    public void deleteLoanById(@PathVariable Long idloan) throws LoanNotFoundException {
-        loanService.deleteLoanById(idloan);
+    public MessageResponseDTO deleteLoanById(@PathVariable Long idloan) throws LoanNotFoundException {
+        return loanService.deleteLoanById(idloan);
     }
 
 

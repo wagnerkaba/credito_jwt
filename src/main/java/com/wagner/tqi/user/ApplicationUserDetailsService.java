@@ -26,7 +26,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
     // busca email do usuário logado no sistema
     // se usuário não estiver logado, retorna null
-    public static String getLoggedUser(){
+    public static String getAuthenticatedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             return auth.getName();

@@ -2,7 +2,7 @@ package com.wagner.tqi.person.controller;
 
 
 import com.wagner.tqi.person.dto.request.PersonDTO;
-import com.wagner.tqi.person.dto.response.MessageResponseDTO;
+import com.wagner.tqi.response.MessageResponseDTO;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.service.PersonService;
 import lombok.AllArgsConstructor;
@@ -47,10 +47,10 @@ public class PersonController {
 
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('person:write')")
-    public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
-        personService.deleteById(id);
+    public MessageResponseDTO deleteById(@PathVariable Long id) throws PersonNotFoundException {
+        return personService.deleteById(id);
     }
 
     @PutMapping("/{id}")

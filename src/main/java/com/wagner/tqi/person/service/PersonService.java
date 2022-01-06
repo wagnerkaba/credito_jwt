@@ -1,11 +1,12 @@
 package com.wagner.tqi.person.service;
 
 
+import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wagner.tqi.person.dto.request.PersonDTO;
-import com.wagner.tqi.person.dto.response.MessageResponseDTO;
+import com.wagner.tqi.response.MessageResponseDTO;
 import com.wagner.tqi.person.entity.Person;
 import com.wagner.tqi.exception.PersonNotFoundException;
 import com.wagner.tqi.person.mapper.PersonMapper;
@@ -13,6 +14,8 @@ import com.wagner.tqi.person.repository.PersonRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.wagner.tqi.response.MessageResponseDTO.createMessageResponseDTO;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -29,7 +32,10 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(personToSave);
 
-        return createMessageResponseDTO(savedPerson.getId(), "Created person with ID: ");
+        // verifica o usuário logado para colocar no response
+        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+
+        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", authenticatedUser);
     }
 
     public List<PersonDTO> listAll() {
@@ -50,11 +56,15 @@ public class PersonService {
     }
 
 
-    public void deleteById(Long id) throws PersonNotFoundException {
+    public MessageResponseDTO deleteById(Long id) throws PersonNotFoundException {
 
         verifyIfExists(id);
         personRepository.deleteById(id);
 
+        // verifica o usuário logado para colocar no response
+        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+
+        return createMessageResponseDTO(id, "Removido pessoa com ID:", authenticatedUser);
     }
 
     public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
@@ -62,7 +72,11 @@ public class PersonService {
         verifyIfExists(id);
         Person personToUpdate = personMapper.toModel(personDTO);
         Person updatedPerson = personRepository.save(personToUpdate);
-        return createMessageResponseDTO(updatedPerson.getId(), "Updated person with ID ");
+
+        // verifica o usuário logado para colocar no response
+        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+
+        return createMessageResponseDTO(updatedPerson.getId(), "Alterado pessoa com ID:", authenticatedUser);
     }
 
 
@@ -73,11 +87,4 @@ public class PersonService {
 
 
 
-    private MessageResponseDTO createMessageResponseDTO(Long id, String message) {
-
-        return MessageResponseDTO
-                .builder()
-                .mensagem(message + id)
-                .build();
-    }
 }
