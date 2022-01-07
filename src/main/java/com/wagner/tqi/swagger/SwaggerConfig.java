@@ -34,7 +34,7 @@ public class SwaggerConfig {
     private ApiInfo buildApiInfo(){
         return new ApiInfoBuilder()
                 .title("Emprestimo API")
-                .description("REST API")
+                .description("REST API para sistema de empréstimos e cadastro de pessoas com autenticação por meio de tokens JWT")
                 .version("1.0.0")
                 .contact(new Contact("Wagner Kaba", "https://github.com/wagnerkaba", "elguapore@gmail.com"))
                 .build();
