@@ -10,6 +10,7 @@ import com.wagner.tqi.loan.entity.LoanSimpleList;
 import com.wagner.tqi.response.MessageResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class LoanController {
 
     // busca empréstimos de todos os usuários
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
     public List<Loan> getAllLoans(){
         return loanService.getAllLoans();
     }
@@ -51,6 +53,7 @@ public class LoanController {
 
     // apaga empréstimo
     @DeleteMapping("/{idloan}")
+    @PreAuthorize("hasAuthority('person:write')")
     public MessageResponseDTO deleteLoanById(@PathVariable Long idloan) throws LoanNotFoundException {
         return loanService.deleteLoanById(idloan);
     }

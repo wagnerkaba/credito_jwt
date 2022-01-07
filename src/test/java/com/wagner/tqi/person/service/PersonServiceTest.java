@@ -1,5 +1,6 @@
 package com.wagner.tqi.person.service;
 
+import com.wagner.tqi.exception.PersonBadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +33,7 @@ public class PersonServiceTest {
     private PersonService personService;
 
     @Test
-    void shouldCreatePerson() {
+    void shouldCreatePerson() throws PersonBadRequestException {
         PersonDTO personDTO = createFakeDTO(); //método static da classe PersonUtils
         Person expectedSavedPerson = createFakeEntity(); //método static da classe PersonUtils
 

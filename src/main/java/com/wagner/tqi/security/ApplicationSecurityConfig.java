@@ -40,7 +40,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey)) //filtro utilizado quando o usuário tenta se autenticar
                 .addFilterAfter(new JwtTokenVerifier(secretKey,jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class) //filtro para verificar se o token jwt é válido
                 .authorizeRequests()
-                .antMatchers("/**", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/**", "index").permitAll()
                 .anyRequest()
                 .authenticated();
 

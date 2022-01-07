@@ -30,7 +30,7 @@ public class PersonService {
 
 
     // método para criar novos usuários
-    public MessageResponseDTO createPerson(PersonDTO personDTO, boolean isAnonymous) {
+    public MessageResponseDTO createPerson(PersonDTO personDTO, boolean isAnonymous) throws PersonBadRequestException {
         String user = null;
         Person savedPerson = null;
 
@@ -109,9 +109,9 @@ public class PersonService {
                 .orElseThrow(()-> new PersonNotFoundException(id.toString()));
     }
 
-    @SneakyThrows
+
     // tenta salvar Person no banco de dados. Se não conseguir, lança exceção
-    private Person tryToSave(Person personToSave){
+    private Person tryToSave(Person personToSave) throws PersonBadRequestException {
         Person savedPerson = new Person();
 
         try {

@@ -25,7 +25,7 @@ public class PersonController {
     private PersonService personService;
 
     @GetMapping
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
     public List<PersonDTO> listAll(){
 
         return personService.listAll();
@@ -42,8 +42,8 @@ public class PersonController {
     //endpoint para ADMIN criar cadastro de pessoas
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasAuthority('person:write')")
-    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
+    @PreAuthorize("hasAuthority('person:write')")
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) throws PersonBadRequestException {
 
         return personService.createPerson(personDTO, false);
     }
@@ -51,7 +51,7 @@ public class PersonController {
     // endpoint para qualquer pessoa criar um cadastro
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO registerPerson(@RequestBody @Valid PersonDTO personDTO){
+    public MessageResponseDTO registerPerson(@RequestBody @Valid PersonDTO personDTO) throws PersonBadRequestException {
         return personService.createPerson(personDTO, true);
     }
 
