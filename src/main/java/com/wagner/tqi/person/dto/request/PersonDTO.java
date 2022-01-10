@@ -30,7 +30,7 @@ public class PersonDTO {
     private String lastName;
 
     @NotEmpty
-    @CPF(message = "CPF INVÁLIDO")
+    @CPF
     private String cpf;
 
     @NotEmpty

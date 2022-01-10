@@ -1,14 +1,11 @@
 package com.wagner.tqi.person.service;
 
 
-import com.wagner.tqi.exception.LoanBadRequestException;
-import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.PersonBadRequestException;
 import com.wagner.tqi.loan.LoanService;
 import com.wagner.tqi.security.ApplicationUserRole;
 import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wagner.tqi.person.dto.request.PersonDTO;
@@ -33,6 +30,8 @@ public class PersonService {
 
     private LoanService loanService;
 
+    private ApplicationUserDetailsService applicationUserDetailsService;
+
 
     // método para criar novos usuários
     public MessageResponseDTO createPerson(PersonDTO personDTO, boolean isAnonymous) throws PersonBadRequestException {
@@ -50,13 +49,13 @@ public class PersonService {
 
 
         // verifica o usuário logado para colocar o autor do request no response
-        user = ApplicationUserDetailsService.getAuthenticatedUser();
+        user = applicationUserDetailsService.getAuthenticatedUser();
 
         // se user == null isso significa que não tem nenhum usuário autenticado
         // nesse caso, presume-se que o autor do request é o savedPerson
         if (user==null) user = savedPerson.getEmail();
 
-        return createMessageResponseDTO(savedPerson.getId(), "Criado pessoa com ID: ", user);
+        return createMessageResponseDTO(savedPerson.getId(), "Criado uma pessoa com ID: ", user);
     }
 
     public List<PersonDTO> listAll() {
@@ -93,7 +92,7 @@ public class PersonService {
         personRepository.deleteById(id);
 
         // verifica o usuário logado para colocar no response
-        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+        String authenticatedUser = applicationUserDetailsService.getAuthenticatedUser();
 
         return createMessageResponseDTO(id, "Removido pessoa com ID:", authenticatedUser);
     }
@@ -113,7 +112,7 @@ public class PersonService {
         Person updatedPerson = tryToSave(personToUpdate);
 
         // verifica o usuário logado para colocar no response
-        String authenticatedUser = ApplicationUserDetailsService.getAuthenticatedUser();
+        String authenticatedUser = applicationUserDetailsService.getAuthenticatedUser();
 
         return createMessageResponseDTO(updatedPerson.getId(), "Alterado pessoa com ID:", authenticatedUser);
     }

@@ -83,8 +83,11 @@ Foram criados testes unitários para algumas classes do sistema.
 
 
 
-## **Documentação**
+## **Documentação no POSTMAN**
 
+Foi criado documentação completa no POSTMAN:
+
+https://www.postman.com/wagnerkaba/workspace/public/documentation/19070115-f0da9d0e-3935-459b-8382-3d828bfde3d3
 
 
 ## *Deploy* no HEROKU

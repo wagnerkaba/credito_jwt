@@ -1,6 +1,7 @@
 package com.wagner.tqi.person.service;
 
 import com.wagner.tqi.exception.PersonBadRequestException;
+import com.wagner.tqi.user.ApplicationUserDetailsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,12 @@ public class PersonServiceTest {
     @InjectMocks
     private PersonService personService;
 
+    @Mock
+    private ApplicationUserDetailsService applicationUserDetailsService;
+
+
+
+
     @Test
     void shouldCreatePerson() throws PersonBadRequestException {
         PersonDTO personDTO = createFakeDTO(); //método static da classe PersonUtils
@@ -40,9 +47,11 @@ public class PersonServiceTest {
 
         Mockito.when(personRepository.save(any(Person.class))).thenReturn(expectedSavedPerson);
 
-        MessageResponseDTO expectedSuccessMessage = createExpectedSuccessMessage(expectedSavedPerson.getId());
+        Mockito.when(applicationUserDetailsService.getAuthenticatedUser()).thenReturn(expectedSavedPerson.getEmail());
 
-        MessageResponseDTO successMessage = personService.createPerson(personDTO, false);
+        MessageResponseDTO expectedSuccessMessage = createExpectedSuccessMessage(expectedSavedPerson.getId() , expectedSavedPerson.getEmail());
+
+        MessageResponseDTO successMessage = personService.createPerson(personDTO, true);
 
         Assertions.assertEquals(expectedSuccessMessage, successMessage);
     }
@@ -60,9 +69,10 @@ public class PersonServiceTest {
     }
 
 
-    private MessageResponseDTO createExpectedSuccessMessage(Long savedPersonId){
+    private MessageResponseDTO createExpectedSuccessMessage(Long id, String email){
         return MessageResponseDTO.builder()
-                .mensagem("Created person with ID: " + savedPersonId)
+                .mensagem("Criado uma pessoa com ID: " + id)
+                .autor(email)
                 .build();
     }
 
