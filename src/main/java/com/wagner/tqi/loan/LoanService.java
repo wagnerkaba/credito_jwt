@@ -57,7 +57,7 @@ public class LoanService {
                 loanDTO.getDataPedido(),
                 loanDTO.getQtdParcelas(),
                 person,
-                1 //Código do empréstimo a ser definito pelas regras de negócio
+                "CODIGO_A_SER_DEFINIDO_PELAS_REGRAS_DE_NEGOCIO"
         );
 
         Loan savedLoan = loanRepository.save(loan);

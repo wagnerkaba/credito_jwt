@@ -34,7 +34,7 @@ public class Loan {
     @ManyToOne
     private Person cliente;
 
-    private int codigo;
+    private String codigo;
 
 
 
