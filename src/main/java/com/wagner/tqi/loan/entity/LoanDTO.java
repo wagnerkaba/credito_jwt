@@ -24,6 +24,6 @@ public class LoanDTO {
 //    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dataPedido;
     private int qtdParcelas;
-    private int codigo;
+    private String codigo;
     private Long idPerson;
 }

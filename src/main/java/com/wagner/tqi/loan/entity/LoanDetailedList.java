@@ -8,7 +8,7 @@ import java.time.LocalDate;
 // Objetivo: retornar código do empréstimo, valor, quantidade de parcelas, data da primeira parcela, e-mail do cliente e renda do cliente.
 // Mais informações: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 public interface LoanDetailedList{
-    int getCodigo();
+    String getCodigo();
     Long getValor();
     int getQtdParcelas();
     LocalDate getPrimeiraParcela();
