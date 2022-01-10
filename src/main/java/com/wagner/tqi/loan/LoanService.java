@@ -117,6 +117,17 @@ public class LoanService {
 
     }
 
+    // verifica se uma determinada pessoa possui empréstimos em seu nome
+    public boolean clientHaveLoans(String email) {
+
+        List<LoanSimpleList> loansByClienteEmail = loanRepository.findByCliente_Email(email, LoanSimpleList.class);
+
+        // se a pessoa não possui empréstimos então é retornado: false
+        if (loansByClienteEmail.isEmpty()) return false;
+        else return true; //true significa que a pessoa possui empréstimos
+    }
+
+
 
     // verifica se uma solicitação de empréstimo existe
     private Loan verifyIfLoanExists(Long idloan) throws LoanNotFoundException {

@@ -1,7 +1,10 @@
 package com.wagner.tqi.person.service;
 
 
+import com.wagner.tqi.exception.LoanBadRequestException;
+import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.PersonBadRequestException;
+import com.wagner.tqi.loan.LoanService;
 import com.wagner.tqi.security.ApplicationUserRole;
 import com.wagner.tqi.user.ApplicationUserDetailsService;
 import lombok.AllArgsConstructor;
@@ -27,6 +30,8 @@ public class PersonService {
     private PersonRepository personRepository;
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
+
+    private LoanService loanService;
 
 
     // método para criar novos usuários
@@ -72,9 +77,19 @@ public class PersonService {
     }
 
 
-    public MessageResponseDTO deleteById(Long id) throws PersonNotFoundException {
+    public MessageResponseDTO deleteById(Long id) throws PersonNotFoundException, PersonBadRequestException {
 
-        verifyIfExists(id);
+
+        // verifica se Person com o id desejado existe
+        Person person = verifyIfExists(id);
+
+        // se a pessoa possui empréstimos em seu nome, ela não pode ser apagada
+        if (loanService.clientHaveLoans(person.getEmail())) {
+            throw new PersonBadRequestException("PESSOA NÃO PODE SER APAGADA PORQUE POSSUI EMPRÉSTIMOS EM SEU NOME");
+        }
+
+
+        // Remove Person do banco de dados
         personRepository.deleteById(id);
 
         // verifica o usuário logado para colocar no response

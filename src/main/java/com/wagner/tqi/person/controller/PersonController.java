@@ -1,6 +1,8 @@
 package com.wagner.tqi.person.controller;
 
 
+import com.wagner.tqi.exception.LoanBadRequestException;
+import com.wagner.tqi.exception.LoanNotFoundException;
 import com.wagner.tqi.exception.PersonBadRequestException;
 import com.wagner.tqi.person.dto.request.PersonDTO;
 import com.wagner.tqi.response.MessageResponseDTO;
@@ -60,7 +62,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('person:write')")
-    public MessageResponseDTO deleteById(@PathVariable Long id) throws PersonNotFoundException {
+    public MessageResponseDTO deleteById(@PathVariable Long id) throws PersonNotFoundException, PersonBadRequestException {
         return personService.deleteById(id);
     }
 
